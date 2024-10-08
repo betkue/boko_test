@@ -1,4 +1,5 @@
 import 'package:boko_test/home.dart';
+import 'package:boko_test/utils/color.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -34,19 +35,26 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-          child:
-              // isAuthenticated
-              //     ?
-              HomePage()
-          // :
-          //     ElevatedButton(
-          //   onPressed: authenticate,
-          //   child: const Padding(
-          //     padding: EdgeInsets.all(8.0),
-          //     child: Text("Login with Keycloak"),
-          //   ),
-          // ),
-          ),
+        child: isAuthenticated
+            ? HomePage()
+            : InkWell(
+                child: Container(
+                  height: 50,
+                  margin: EdgeInsets.symmetric(horizontal: 50),
+                  decoration: BoxDecoration(
+                      color: redColor, borderRadius: BorderRadius.circular(20)),
+                  child: Center(
+                    child: Text(
+                      "Login with Keycloak",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ),
+      ),
     );
   }
 }
