@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:boko_test/home.dart';
 import 'package:boko_test/utils/color.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +27,36 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isAuthenticated = false;
   String? accessToken;
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initDeepLinks();
+  }
 
   @override
   void dispose() {
+    _linkSubscription?.cancel();
+
     super.dispose();
+  }
+
+  Future<void> initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    // Handle links
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      debugPrint('onAppLink: $uri');
+      // openAppLink(uri);
+    });
+  }
+
+  void openAppLink(Uri uri) {
+    _navigatorKey.currentState?.pushNamed(uri.fragment);
   }
 
   @override
@@ -43,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                   margin: EdgeInsets.symmetric(horizontal: 50),
                   decoration: BoxDecoration(
                       color: redColor, borderRadius: BorderRadius.circular(20)),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       "Login with Keycloak",
                       style: TextStyle(
