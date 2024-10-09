@@ -79,13 +79,16 @@ class _LoginPageState extends State<LoginPage> {
         tokenEndpoint,
       );
       codeVerifierSave = codeVerifier;
-      var authorizationUrl =
-          grant!.getAuthorizationUrl(Uri.parse('$authorizationEndpoint'
-              '?response_type=code'
-              '&client_id=$clientId'
-              '&redirect_uri=${Uri.encodeComponent(redirectUrl.toString())}'
-              '&code_challenge=$codeChallenge'
-              '&code_challenge_method=S256'));
+      // var authorizationUrl = Uri.parse(
+      //     'https://sso.bitkap.africa/realms/bitkap_dev/protocol/openid-connect/auth?response_type=code&client_id=angolar_test&redirect_uri=https%3A%2F%2Fsso.bitkap.africa%2Foauth2%2Fcallback&code_challenge=7odYwvfZYs7oZtk6oV6llSTw_zOyOfHdY_RbrDq2C-k&code_challenge_method=S256'); // var authorizationUrl = Uri.parse('https://www.google.com');
+      // grant!.getAuthorizationUrl(
+      var authorizationUrl = Uri.parse('$authorizationEndpoint'
+          '?response_type=code'
+          '&client_id=$clientId'
+          '&redirect_uri=${Uri.encodeComponent(redirectUrl.toString())}'
+          '&code_challenge=$codeChallenge'
+          '&code_challenge_method=S256');
+      // );
 
       if (await canLaunchUrl(authorizationUrl)) {
         await launchUrl(
@@ -101,33 +104,39 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> initDeepLinks() async {
-    _appLinks = AppLinks();
+    try {
+      _appLinks = AppLinks();
 
-    // Handle links
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
-      debugPrint('onAppLink: $uri');
-      log('onAppLink: $uri');
-      // Récupérer le code d'autorisation de l'URL de redirection
-      String? code = uri.queryParameters['code'];
+      // Handle links
+      _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
+        debugPrint('onAppLink: $uri');
+        log('onAppLink: $uri');
+        // Récupérer le code d'autorisation de l'URL de redirection
+        String? code = uri.queryParameters['code'];
 
-      if (code != null) {
-        // Échanger le code contre un token
-        setState(() {
-          load = true;
-        });
-        var result = await exchangeCodeForToken(code, codeVerifierSave);
-
-        if (result != null) {
+        if (code != null) {
+          // Échanger le code contre un token
           setState(() {
-            username = result;
-            isAuthenticated = true;
+            load = true;
+          });
+          var result = await exchangeCodeForToken(code, codeVerifierSave);
+
+          if (result != null) {
+            setState(() {
+              username = result;
+              isAuthenticated = true;
+            });
+          }
+          setState(() {
+            load = false;
           });
         }
-        setState(() {
-          load = false;
-        });
-      }
-    });
+      });
+    } catch (e) {
+      setState(() {
+        load = false;
+      });
+    }
   }
 
   @override

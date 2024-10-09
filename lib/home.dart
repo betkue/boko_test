@@ -82,21 +82,24 @@ class HomePage extends StatelessWidget {
               children: [
                 Text('Terms and conditions ',
                     style: TextStyle(
-                        fontSize: 18,
+                        // fontSize: 18,
                         fontStyle: FontStyle.italic,
                         color: blueColor)),
                 Text('Privacy policy ',
                     style: TextStyle(
-                        fontSize: 18,
+                        // fontSize: 18,
                         fontStyle: FontStyle.italic,
                         color: blueColor)),
                 Text('v 1.0.0 ',
                     style: TextStyle(
-                        fontSize: 18,
+                        // fontSize: 18,
                         fontStyle: FontStyle.italic,
                         color: gray2Color)),
               ],
             ),
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),
