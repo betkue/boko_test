@@ -1,11 +1,11 @@
-
 import 'package:boko_test/Components/menu-item.dart';
 import 'package:boko_test/utils/color.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   static const Radius radius = Radius.circular(50);
-  final String user_name = "";
+  final String user_name;
+  HomePage({required this.user_name});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   MenuItem(
                       icon: 'user-icon.png',
-                      text: 'Username',
+                      text: user_name,
                       subtitle: 'Profile and preferences'),
                   MenuItem(
                       icon: 'verify-icon.png',
